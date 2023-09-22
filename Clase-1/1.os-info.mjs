@@ -7,8 +7,7 @@ console.log('Nombre del Sistema Operativo:', platform())
 console.log('Versión del Sistema Operativo:', release())
 console.log('Arquitectura:', arch())
 console.log('CPUs:', cpus())
-console.log('Memoria Libre', freemem()/1024/1024)
-console.log('Memoria Total', totalmem()/1024/1024)
+console.log('Memoria Libre', freemem() / 1024 / 1024)
+console.log('Memoria Total', totalmem() / 1024 / 1024)
 
-console.log('uptime', uptime()/60/60)
-
+console.log('uptime', uptime() / 60 / 60)
