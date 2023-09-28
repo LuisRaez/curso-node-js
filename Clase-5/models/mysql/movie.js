@@ -97,11 +97,9 @@ export class MovieModel {
 
   static async delete ({ id }) {
     // ejercio fácil: crear el delete
-
   }
 
   static async update ({ id, input }) {
     // ejercicio fácil: crear el update
-
   }
 }
