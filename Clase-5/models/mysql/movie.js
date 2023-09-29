@@ -26,8 +26,9 @@ export class MovieModel {
 
       // no genre found
       if (genres.length === 0) return []
-
+      
       // get the id from the first genre result
+      // eslint-disable-next-line no-unused-vars
       const [{ id }] = genres
 
       // get all movies ids from database table
@@ -57,7 +58,7 @@ export class MovieModel {
   }
 
   static async create ({ input }) {
-    const {
+    const { // eslint-disable-next-line no-unused-vars
       genre: genreInput, // genre is an array
       title,
       year,
@@ -70,13 +71,13 @@ export class MovieModel {
     // todo: crear la conexión de genre
 
     // crypto.randomUUID()
-    const [uuidResult] = await connection.query('SELECT UUID() uuid;')
-    const [{ uuid }] = uuidResult
+    // const [uuidResult] = await connection.query('SELECT UUID() uuid;')
+    // const [{ uuid }] = uuidResult
 
     try {
       await connection.query(
         `INSERT INTO movie (id, title, year, director, duration, poster, rate)
-          VALUES (UUID_TO_BIN("${uuid}"), ?, ?, ?, ?, ?, ?);`,
+          VALUES (UUID_TO_BIN(UUID()), ?, ?, ?, ?, ?, ?);`,
         [title, year, director, duration, poster, rate]
       )
     } catch (e) {
@@ -88,8 +89,8 @@ export class MovieModel {
 
     const [movies] = await connection.query(
       `SELECT title, year, director, duration, poster, rate, BIN_TO_UUID(id) id
-        FROM movie WHERE id = UUID_TO_BIN(?);`,
-      [uuid]
+        FROM movie`
+
     )
 
     return movies[0]
@@ -97,9 +98,35 @@ export class MovieModel {
 
   static async delete ({ id }) {
     // ejercio fácil: crear el delete
+    const [movies] = await connection.query(
+      `DELETE
+        FROM movie WHERE id = UUID_TO_BIN(?);`,
+      [id]
+    )
+
+    if (movies.length === 0) return null
+
+    return movies[0]
+    //Ejercicio completado
   }
 
   static async update ({ id, input }) {
     // ejercicio fácil: crear el update
+    console.log('1')
+    await connection.query(
+      `UPDATE movie SET ? WHERE id = UUID_TO_BIN('${id}');`,
+      [input]
+    )
+    console.log('2')
+    const [movies] = await connection.query(
+      `SELECT title, year, director, duration, poster, rate, BIN_TO_UUID(id) id
+        FROM movie WHERE id = UUID_TO_BIN(?);`,
+      [id]
+    )
+    console.log('3')
+    if (movies.length === 0) return null
+    console.log('4')
+    return movies[0]
   }
+  //ejercicio completado
 }
